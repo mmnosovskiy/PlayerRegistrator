@@ -105,9 +105,7 @@ namespace PlayerRegistrator.ViewModel
                 Set(ref _color1, value);
             }
         }
-
-
-
+        
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -132,12 +130,11 @@ namespace PlayerRegistrator.ViewModel
                 Half = 1,
                 TimeVideo = 10,
                 Col = Colors.Red,
-                Team1 = new Team() { NumberColor = Colors.Red, ShirtColor = Colors.DarkRed, Tactics = new List<Tactics>() },
-                Team2 = new Team() { NumberColor = Colors.DarkOrchid, ShirtColor = Colors.BlueViolet }
+                Team1 = new Team() { NumberColor = Colors.Blue, ShirtColor = Colors.DarkRed, Tactics = new List<Tactics>() },
+                Team2 = new Team() { NumberColor = Colors.White, ShirtColor = Colors.Purple }
             };
-            Color1 = Colors.PowderBlue;
-            //Tactics1 = GetPositions(Game.GetCurrent(Game.Team1));
-            //Tactics2 = GetPositions(Game.GetCurrent(Game.Team2));
+            Tactics1 = GetPositions(new Tactics());
+            Tactics2 = GetPositions(new Tactics());
         }
         private int[][] GetPositions(Tactics tact)
         {

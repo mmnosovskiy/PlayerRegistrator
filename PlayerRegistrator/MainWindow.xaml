@@ -9,10 +9,17 @@
         Height="600"
         Width="700"
         Title="Registrator"
-        DataContext="{Binding Main, Source={StaticResource Locator}}">
-    <!--<Window.Resources>
-        --><!--<SolidColorBrush x:Key="firstTeam"></SolidColorBrush>--><!--
-    </Window.Resources>-->
+        DataContext="{Binding Path=Main, Source={StaticResource Locator}}"
+        >
+    <!--<Window.DataContext>
+        <Binding Path="Main" Source="{StaticResource Locator}" />
+    </Window.DataContext>-->
+    <Window.Resources>
+        <SolidColorBrush x:Key="firstTeamShirt" Color="{Binding Game.Team1.ShirtColor}"></SolidColorBrush>
+        <SolidColorBrush x:Key="secondTeamShirt" Color="{Binding Game.Team2.ShirtColor}"></SolidColorBrush>
+        <SolidColorBrush x:Key="firstTeamNumber" Color="{Binding Game.Team1.NumberColor}"></SolidColorBrush>
+        <SolidColorBrush x:Key="secondTeamNumber" Color="{Binding Game.Team2.NumberColor}"></SolidColorBrush>
+    </Window.Resources>
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -57,39 +64,70 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>-->
-                    <!--<Grid.Resources>
+                    <Grid.Resources>
                         <Style TargetType="Ellipse">
-                            <Setter Property="Fill" Value="{DynamicResource firstTeam}"></Setter>
+                            <Setter Property="Fill" Value="{StaticResource firstTeamShirt}"></Setter>
                         </Style>
-                    </Grid.Resources>-->
+                        <Style TargetType="Label">
+                            <Setter Property="Foreground" Value="{StaticResource firstTeamNumber}"></Setter>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+                            <Setter Property="Panel.ZIndex" Value="0"></Setter>
+                        </Style>
+                    </Grid.Resources>
 
                     <Ellipse Name="Place1_3_1" Grid.Row="2" Grid.Column="0" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
-                    <Label Grid.Row="2" Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="Red" Content="15" Panel.ZIndex="0"></Label>
+                    <Label Grid.Row="2" Grid.Column="0" Content="{Binding Tactics1[2][0]}"></Label>
                     <Ellipse Name="Place1_1_2" Grid.Row="0" Grid.Column="1" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="0" Grid.Column="1" Content="{Binding Tactics1[0][1]}"></Label>
                     <Ellipse Name="Place1_2_2" Grid.Row="1" Grid.Column="1" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="1" Grid.Column="1" Content="{Binding Tactics1[1][1]}"></Label>
                     <Ellipse Name="Place1_3_2" Grid.Row="2" Grid.Column="1" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="1" Content="{Binding Tactics1[2][1]}"></Label>
                     <Ellipse Name="Place1_4_2" Grid.Row="3" Grid.Column="1" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding Tactics1[3][1]}"></Label>
                     <Ellipse Name="Place1_5_2" Grid.Row="4" Grid.Column="1" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="4" Grid.Column="1" Content="{Binding Tactics1[4][1]}"></Label>
                     <Ellipse Name="Place1_1_3" Grid.Row="0" Grid.Column="2" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="0" Grid.Column="2" Content="{Binding Tactics1[0][2]}"></Label>
                     <Ellipse Name="Place1_2_3" Grid.Row="1" Grid.Column="2" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="1" Grid.Column="2" Content="{Binding Tactics1[1][2]}"></Label>
                     <Ellipse Name="Place1_3_3" Grid.Row="2" Grid.Column="2" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="2" Content="{Binding Tactics1[2][2]}"></Label>
                     <Ellipse Name="Place1_4_3" Grid.Row="3" Grid.Column="2" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="3" Grid.Column="2" Content="{Binding Tactics1[3][2]}"></Label>
                     <Ellipse Name="Place1_5_3" Grid.Row="4" Grid.Column="2" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="4" Grid.Column="2" Content="{Binding Tactics1[4][2]}"></Label>
                     <Ellipse Name="Place1_1_4" Grid.Row="0" Grid.Column="3" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="0" Grid.Column="3" Content="{Binding Tactics1[0][3]}"></Label>
                     <Ellipse Name="Place1_2_4" Grid.Row="1" Grid.Column="3" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="1" Grid.Column="3" Content="{Binding Tactics1[1][3]}"></Label>
                     <Ellipse Name="Place1_3_4" Grid.Row="2" Grid.Column="3" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="3" Content="{Binding Tactics1[2][3]}"></Label>
                     <Ellipse Name="Place1_4_4" Grid.Row="3" Grid.Column="3" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="3" Grid.Column="3" Content="{Binding Tactics1[3][3]}"></Label>
                     <Ellipse Name="Place1_5_4" Grid.Row="4" Grid.Column="3" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="4" Grid.Column="3" Content="{Binding Tactics1[4][3]}"></Label>
                     <Ellipse Name="Place1_1_5" Grid.Row="0" Grid.Column="4" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="0" Grid.Column="4" Content="{Binding Tactics1[0][4]}"></Label>
                     <Ellipse Name="Place1_2_5" Grid.Row="1" Grid.Column="4" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="1" Grid.Column="4" Content="{Binding Tactics1[1][4]}"></Label>
                     <Ellipse Name="Place1_3_5" Grid.Row="2" Grid.Column="4" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="4" Content="{Binding Tactics1[2][4]}"></Label>
                     <Ellipse Name="Place1_4_5" Grid.Row="3" Grid.Column="4" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="3" Grid.Column="4" Content="{Binding Tactics1[3][4]}"></Label>
                     <Ellipse Name="Place1_5_5" Grid.Row="4" Grid.Column="4" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="4" Grid.Column="4" Content="{Binding Tactics1[4][4]}"></Label>
                     <Ellipse Name="Place1_1_6" Grid.Row="0" Grid.Column="5" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="0" Grid.Column="5" Content="{Binding Tactics1[0][5]}"></Label>
                     <Ellipse Name="Place1_2_6" Grid.Row="1" Grid.Column="5" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="1" Grid.Column="5" Content="{Binding Tactics1[1][5]}"></Label>
                     <Ellipse Name="Place1_3_6" Grid.Row="2" Grid.Column="5" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="5" Content="{Binding Tactics1[2][5]}"></Label>
                     <Ellipse Name="Place1_4_6" Grid.Row="3" Grid.Column="5" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="3" Grid.Column="5" Content="{Binding Tactics1[3][5]}"></Label>
                     <Ellipse Name="Place1_5_6" Grid.Row="4" Grid.Column="5" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="4" Grid.Column="5" Content="{Binding Tactics1[4][5]}"></Label>
                 </Grid>
                 <Grid Grid.Column="1" Margin="5" VerticalAlignment="Stretch">
                     <Grid.RowDefinitions>
@@ -107,36 +145,74 @@
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="Ellipse">
+                            <Setter Property="Fill" Value="{StaticResource secondTeamShirt}"></Setter>
+                        </Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Foreground" Value="{StaticResource secondTeamNumber}"></Setter>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+                            <Setter Property="Panel.ZIndex" Value="0"></Setter>
+                        </Style>
+                    </Grid.Resources>
+                    
                     <Ellipse Name="Place2_1_6" Grid.Row="0" Grid.Column="0" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="0" Grid.Column="0" Content="{Binding Tactics1[0][5]}"></Label>
                     <Ellipse Name="Place2_2_6" Grid.Row="1" Grid.Column="0" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="1" Grid.Column="0" Content="{Binding Tactics1[1][5]}"></Label>
                     <Ellipse Name="Place2_3_6" Grid.Row="2" Grid.Column="0" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="0" Content="{Binding Tactics1[2][5]}"></Label>
                     <Ellipse Name="Place2_4_6" Grid.Row="3" Grid.Column="0" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="3" Grid.Column="0" Content="{Binding Tactics1[3][5]}"></Label>
                     <Ellipse Name="Place2_5_6" Grid.Row="4" Grid.Column="0" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="4" Grid.Column="0" Content="{Binding Tactics1[4][5]}"></Label>
                     <Ellipse Name="Place2_1_5" Grid.Row="0" Grid.Column="1" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="0" Grid.Column="1" Content="{Binding Tactics1[0][4]}"></Label>
                     <Ellipse Name="Place2_2_5" Grid.Row="1" Grid.Column="1" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="1" Grid.Column="1" Content="{Binding Tactics1[1][4]}"></Label>
                     <Ellipse Name="Place2_3_5" Grid.Row="2" Grid.Column="1" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="1" Content="{Binding Tactics1[2][4]}"></Label>
                     <Ellipse Name="Place2_4_5" Grid.Row="3" Grid.Column="1" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding Tactics1[3][4]}"></Label>
                     <Ellipse Name="Place2_5_5" Grid.Row="4" Grid.Column="1" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="4" Grid.Column="1" Content="{Binding Tactics1[4][4]}"></Label>
                     <Ellipse Name="Place2_1_4" Grid.Row="0" Grid.Column="2" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="0" Grid.Column="2" Content="{Binding Tactics1[0][3]}"></Label>
                     <Ellipse Name="Place2_2_4" Grid.Row="1" Grid.Column="2" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="1" Grid.Column="2" Content="{Binding Tactics1[1][3]}"></Label>
                     <Ellipse Name="Place2_3_4" Grid.Row="2" Grid.Column="2" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="2" Content="{Binding Tactics1[2][3]}"></Label>
                     <Ellipse Name="Place2_4_4" Grid.Row="3" Grid.Column="2" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="3" Grid.Column="2" Content="{Binding Tactics1[3][3]}"></Label>
                     <Ellipse Name="Place2_5_4" Grid.Row="4" Grid.Column="2" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="4" Grid.Column="2" Content="{Binding Tactics1[4][3]}"></Label>
                     <Ellipse Name="Place2_1_3" Grid.Row="0" Grid.Column="3" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="0" Grid.Column="3" Content="{Binding Tactics1[0][2]}"></Label>
                     <Ellipse Name="Place2_2_3" Grid.Row="1" Grid.Column="3" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="1" Grid.Column="3" Content="{Binding Tactics1[1][2]}"></Label>
                     <Ellipse Name="Place2_3_3" Grid.Row="2" Grid.Column="3" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="3" Content="{Binding Tactics1[2][2]}"></Label>
                     <Ellipse Name="Place2_4_3" Grid.Row="3" Grid.Column="3" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="3" Grid.Column="3" Content="{Binding Tactics1[3][2]}"></Label>
                     <Ellipse Name="Place2_5_3" Grid.Row="4" Grid.Column="3" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="4" Grid.Column="3" Content="{Binding Tactics1[4][2]}"></Label>
                     <Ellipse Name="Place2_1_2" Grid.Row="0" Grid.Column="4" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="0" Grid.Column="4" Content="{Binding Tactics1[0][1]}"></Label>
                     <Ellipse Name="Place2_2_2" Grid.Row="1" Grid.Column="4" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="1" Grid.Column="4" Content="{Binding Tactics1[1][1]}"></Label>
                     <Ellipse Name="Place2_3_2" Grid.Row="2" Grid.Column="4" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="4" Content="{Binding Tactics1[2][1]}"></Label>
                     <Ellipse Name="Place2_4_2" Grid.Row="3" Grid.Column="4" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="3" Grid.Column="4" Content="{Binding Tactics1[3][1]}"></Label>
                     <Ellipse Name="Place2_5_2" Grid.Row="4" Grid.Column="4" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="4" Grid.Column="4" Content="{Binding Tactics1[4][1]}"></Label>
                     <Ellipse Name="Place2_3_1" Grid.Row="2" Grid.Column="5" Stroke="Black" StrokeThickness="1" Margin="2"></Ellipse>
+                    <Label Grid.Row="2" Grid.Column="5" Content="{Binding Tactics1[2][0]}"></Label>
                 </Grid>
             </Grid>
 
-            <MediaElement Name="media" Grid.Row="2" Margin="5" Source="C:\Users\А\Downloads\Загрузки uTorrent\ITVDN\22 [ITVDN] WPF Advanced\Урок 10. Шаблон проектирования Model-View-ViewModel.mkv"></MediaElement>
+            <MediaElement Name="media" Grid.Row="2" Margin="5"></MediaElement>
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
