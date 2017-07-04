@@ -14,6 +14,8 @@ namespace PlayerRegistrator
         public MainWindow()
         {
             InitializeComponent();
+            media.Play();
+            media.Focus();
             Closing += (s, e) => ViewModelLocator.Cleanup();
         }
     }

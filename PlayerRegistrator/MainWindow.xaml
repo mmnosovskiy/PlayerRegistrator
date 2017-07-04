@@ -20,6 +20,11 @@
         <SolidColorBrush x:Key="firstTeamNumber" Color="{Binding Game.Team1.NumberColor}"></SolidColorBrush>
         <SolidColorBrush x:Key="secondTeamNumber" Color="{Binding Game.Team2.NumberColor}"></SolidColorBrush>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="F3" Command="{Binding PlayPauseCommand}" CommandParameter="{Binding ElementName=media}"></KeyBinding>
+        <KeyBinding Key="F5" Command="{Binding ForwardCommand}" CommandParameter="{Binding ElementName=media}"></KeyBinding>
+        <KeyBinding Key="F4" Command="{Binding BackwardCommand}" CommandParameter="{Binding ElementName=media}"></KeyBinding>
+    </Window.InputBindings>
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -211,16 +216,17 @@
                     <Label Grid.Row="2" Grid.Column="5" Content="{Binding Tactics1[2][0]}"></Label>
                 </Grid>
             </Grid>
-
-            <MediaElement Name="media" Grid.Row="2" Margin="5"></MediaElement>
+            <Border Grid.Row="2" BorderThickness="1" BorderBrush="Black" Margin="5">
+            <MediaElement Focusable="True" Name="media" LoadedBehavior="Manual" Margin="5" ScrubbingEnabled="True" Source="C:\Users\А\Downloads\Загрузки uTorrent\ITVDN\22 [ITVDN] WPF Advanced\Урок 10. Шаблон проектирования Model-View-ViewModel.mkv"></MediaElement>
+            </Border>
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Margin="5" Content="{Binding Game.TimeVideo}" VerticalContentAlignment="Center"></Label>
-                <Slider Name="Slider1" Grid.Column="1" Value="{Binding Path=Game.TimeVideo, Mode=TwoWay}" VerticalAlignment="Center" Margin="5"></Slider>
+                <Label Grid.Column="0" Margin="5" Content="{Binding ElementName=media, Path=Position}" VerticalContentAlignment="Center"></Label>
+                <Slider Name="Slider1" Grid.Column="1" Value="{Binding ElementName=media, Path=Position.Milliseconds, Mode=OneWay}" VerticalAlignment="Center" Margin="5" Maximum="{Binding ElementName=media, Path=NaturalDuration}"></Slider>
                 <Label Grid.Column="2" Content="{Binding ElementName=media, Path=NaturalDuration}" VerticalContentAlignment="Center" Margin="5"></Label>
             </Grid>
         </Grid>

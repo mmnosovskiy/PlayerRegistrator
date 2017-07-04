@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using PlayerRegistrator.Model;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -17,10 +19,12 @@ namespace PlayerRegistrator.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
+        bool IsPlaying { get; set; }
+        public RelayCommand<MediaElement> PlayPauseCommand { get; set; }
+        public RelayCommand<MediaElement> ForwardCommand { get; set; }
+        public RelayCommand<MediaElement> BackwardCommand { get; set; }
 
 
-
-        
         private double _duration;
         public double Duration
         {
@@ -105,7 +109,18 @@ namespace PlayerRegistrator.ViewModel
                 Set(ref _color1, value);
             }
         }
-        
+        private Stopwatch _watch;
+        public Stopwatch Watch
+        {
+            get
+            {
+                return _watch;
+            }
+            set
+            {
+                Set(ref _watch, value);
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -125,21 +140,58 @@ namespace PlayerRegistrator.ViewModel
 
             //        CurrentTime = 0;
             //    });
+            
             Game = new Match()
             {
                 Half = 1,
                 TimeVideo = 10,
                 Col = Colors.Red,
-                Team1 = new Team() { NumberColor = Colors.Blue, ShirtColor = Colors.DarkRed, Tactics = new List<Tactics>() },
+                Team1 = new Team() { NumberColor = Colors.White, ShirtColor = Colors.DarkRed, Tactics = new List<Tactics>() },
                 Team2 = new Team() { NumberColor = Colors.White, ShirtColor = Colors.Purple }
             };
+            IsPlaying = true;
+            Watch = new Stopwatch();
+            Watch.Start();
             Tactics1 = GetPositions(new Tactics());
             Tactics2 = GetPositions(new Tactics());
+            PlayPauseCommand = new RelayCommand<MediaElement>(x => PlayPauseMethod(x));
+            ForwardCommand = new RelayCommand<MediaElement>(x => ForwardMethod(x));
+            BackwardCommand = new RelayCommand<MediaElement>(x => BackwardMethod(x));
+        }
+        void PlayPauseMethod(MediaElement media)
+        {
+            if (IsPlaying)
+            {
+                media.Pause();
+                IsPlaying = false;
+            }
+            else
+            {
+                media.Play();
+                IsPlaying = true;
+            }
+        }
+        void ForwardMethod(MediaElement media)
+        {
+            TimeSpan ts = media.Position;
+            media.Position = new TimeSpan(ts.Days, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds + 100);
+            if (IsPlaying) media.Play();
+            else media.Pause();
+        }
+        void BackwardMethod(MediaElement media)
+        {
+            TimeSpan ts = media.Position;
+            if (ts.TotalMilliseconds > 100)
+                media.Position = new TimeSpan(ts.Days, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds - 100);
+            else
+                media.Position = new TimeSpan(0);
+            if (IsPlaying) media.Play();
+            else media.Pause();
         }
         private int[][] GetPositions(Tactics tact)
         {
             int[][] res = new int[5][];
-            for (int i = 0; i < res.Length; i++)
+            for (int i = 0; i < res.Length; i++) 
             {
                 res[i] = new int[6];
             }
