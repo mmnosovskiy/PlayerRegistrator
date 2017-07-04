@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Apex.MVVM;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using PlayerRegistrator.Model;
 using System;
@@ -154,6 +155,7 @@ namespace PlayerRegistrator.ViewModel
             Watch.Start();
             Tactics1 = GetPositions(new Tactics());
             Tactics2 = GetPositions(new Tactics());
+            //_recolor1 = new RelayCommand<Ellipse>(DoRecolor1);
             PlayPauseCommand = new RelayCommand<MediaElement>(x => PlayPauseMethod(x));
             ForwardCommand = new RelayCommand<MediaElement>(x => ForwardMethod(x));
             BackwardCommand = new RelayCommand<MediaElement>(x => BackwardMethod(x));
@@ -201,16 +203,55 @@ namespace PlayerRegistrator.ViewModel
             }
             return res;
         }
-
-        private RelayCommand<Ellipse> _recolor;
-        public RelayCommand<Ellipse> Recolor
+        //private RelayCommand<Ellipse> _recolor1;
+        //public RelayCommand<Ellipse> Recolor1
+        //{
+        //    get { return _recolor1; }
+        //}
+        //public void DoRecolor1(Ellipse ell)
+        //{
+        //    //foreach (Ellipse item in (ell.Parent as Grid).Children)
+        //    //{
+        //    //    item.Fill = new SolidColorBrush(Game.Team1.ShirtColor);
+        //    //}
+        //    //ell.Fill = new SolidColorBrush(Color.Subtract(((SolidColorBrush)ell.Fill).Color, Colors.Black));
+        //    ell.Fill = new SolidColorBrush(Colors.Black);
+        //}
+        private RelayCommand<Button> _recolor1;
+        public RelayCommand<Button> Recolor1
         {
             get
             {
-                return _recolor ??
-                    (_recolor = new RelayCommand<Ellipse>(obj =>
+                return _recolor1 ??
+                    (_recolor1 = new RelayCommand<Button>(obj =>
                     {
-                        obj.Fill = new SolidColorBrush(Color.Subtract(((SolidColorBrush)obj.Fill).Color, Colors.Black));
+                        foreach (Button item in (obj.Parent as Grid).Children)
+                        {
+                            item.Background = new SolidColorBrush(Game.Team1.ShirtColor);
+                        }
+                        byte r = (byte)(255 - Game.Team1.ShirtColor.R);
+                        byte g = (byte)(255 - Game.Team1.ShirtColor.G);
+                        byte b = (byte)(255 - Game.Team1.ShirtColor.B);
+                        obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+                    }));
+            }
+        }
+        private RelayCommand<Button> _recolor2;
+        public RelayCommand<Button> Recolor2
+        {
+            get
+            {
+                return _recolor2 ??
+                    (_recolor2 = new RelayCommand<Button>(obj =>
+                    {
+                        foreach (Button item in (obj.Parent as Grid).Children)
+                        {
+                            item.Background = new SolidColorBrush(Game.Team2.ShirtColor);
+                        }
+                        byte r = (byte)(255 - Game.Team2.ShirtColor.R);
+                        byte g = (byte)(255 - Game.Team2.ShirtColor.G);
+                        byte b = (byte)(255 - Game.Team2.ShirtColor.B);
+                        obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
                     }));
             }
         }

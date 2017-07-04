@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using PlayerRegistrator.ViewModel;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace PlayerRegistrator
 {
@@ -15,8 +17,8 @@ namespace PlayerRegistrator
         {
             InitializeComponent();
             media.Play();
-            media.Focus();
             Closing += (s, e) => ViewModelLocator.Cleanup();
         }
+        
     }
 }
