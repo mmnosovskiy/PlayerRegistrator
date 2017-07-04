@@ -5,8 +5,11 @@ using PlayerRegistrator.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Linq;
 using System.Windows.Shapes;
 
 namespace PlayerRegistrator.ViewModel
@@ -24,6 +27,7 @@ namespace PlayerRegistrator.ViewModel
         public RelayCommand<MediaElement> PlayPauseCommand { get; set; }
         public RelayCommand<MediaElement> ForwardCommand { get; set; }
         public RelayCommand<MediaElement> BackwardCommand { get; set; }
+        public RelayCommand<Grid> HideTacticsCommand { get; set; }
 
 
         private double _duration;
@@ -62,18 +66,6 @@ namespace PlayerRegistrator.ViewModel
                 Set(ref _game, value);
             }
         }
-        private SolidColorBrush _brush;
-        public SolidColorBrush Brush
-        {
-            get
-            {
-                return _brush;
-            }
-            set
-            {
-                Set(ref _brush, value);
-            }
-        }
         private int[][] _tactics1;
         public int[][] Tactics1
         {
@@ -98,18 +90,6 @@ namespace PlayerRegistrator.ViewModel
                 Set(ref _tactics2, value);
             }
         }
-        private Color _color1;
-        public Color Color1
-        {
-            get
-            {
-                return _color1;
-            }
-            set
-            {
-                Set(ref _color1, value);
-            }
-        }
         private Stopwatch _watch;
         public Stopwatch Watch
         {
@@ -122,7 +102,7 @@ namespace PlayerRegistrator.ViewModel
                 Set(ref _watch, value);
             }
         }
-
+        
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -138,27 +118,143 @@ namespace PlayerRegistrator.ViewModel
             //            // Report error here
             //            return;
             //        }
-
-            //        CurrentTime = 0;
             //    });
             
             Game = new Match()
             {
                 Half = 1,
-                TimeVideo = 10,
-                Col = Colors.Red,
+                TimeVideo = 0,
                 Team1 = new Team() { NumberColor = Colors.White, ShirtColor = Colors.DarkRed, Tactics = new List<Tactics>() },
-                Team2 = new Team() { NumberColor = Colors.White, ShirtColor = Colors.Purple }
+                Team2 = new Team() { NumberColor = Colors.White, ShirtColor = Colors.Purple, Tactics = new List<Tactics>() },
+                DisabledPlayers = new List<Player>() { new Player() { Name = "PL8", Number = 8 } }
             };
             IsPlaying = true;
-            Watch = new Stopwatch();
-            Watch.Start();
-            Tactics1 = GetPositions(new Tactics());
-            Tactics2 = GetPositions(new Tactics());
-            //_recolor1 = new RelayCommand<Ellipse>(DoRecolor1);
+            List<Place> p0 = new List<Place>()
+            {
+                new Place() { Amplua = 0, Position = 2, Player = new Player() { Name = "PL1", Number = 1 } },
+                new Place() { Amplua = 1, Position = 0, Player = new Player() { Name = "PL2", Number = 2 } },
+                new Place() { Amplua = 1, Position = 2, Player = new Player() { Name = "PL3", Number = 3 } },
+                new Place() { Amplua = 1, Position = 3, Player = new Player() { Name = "PL4", Number = 4 } },
+                new Place() { Amplua = 1, Position = 4, Player = new Player() { Name = "PL5", Number = 5 } },
+                new Place() { Amplua = 3, Position = 1, Player = new Player() { Name = "PL6", Number = 6 } },
+                new Place() { Amplua = 2, Position = 2, Player = new Player() { Name = "PL7", Number = 7 } },
+                new Place() { Amplua = 3, Position = 3, Player = new Player() { Name = "PL8", Number = 8 } },
+                new Place() { Amplua = 4, Position = 1, Player = new Player() { Name = "PL9", Number = 9 } },
+                new Place() { Amplua = 5, Position = 2, Player = new Player() { Name = "PL10", Number = 10 } },
+                new Place() { Amplua = 4, Position = 3, Player = new Player() { Name = "PL11", Number = 11 } },
+            };
+            List<Place> p1 = new List<Place>()
+            {
+                new Place() { Amplua = 0, Position = 2, Player = new Player() { Name = "PL1", Number = 1 } },
+                new Place() { Amplua = 1, Position = 0, Player = new Player() { Name = "PL2", Number = 2 } },
+                new Place() { Amplua = 1, Position = 1, Player = new Player() { Name = "PL3", Number = 3 } },
+                new Place() { Amplua = 1, Position = 2, Player = new Player() { Name = "PL4", Number = 4 } },
+                new Place() { Amplua = 1, Position = 3, Player = new Player() { Name = "PL5", Number = 5 } },
+                new Place() { Amplua = 2, Position = 1, Player = new Player() { Name = "PL6", Number = 6 } },
+                new Place() { Amplua = 2, Position = 2, Player = new Player() { Name = "PL7", Number = 7 } },
+                new Place() { Amplua = 2, Position = 3, Player = new Player() { Name = "PL8", Number = 8 } },
+                new Place() { Amplua = 3, Position = 1, Player = new Player() { Name = "PL9", Number = 9 } },
+                new Place() { Amplua = 3, Position = 2, Player = new Player() { Name = "PL10", Number = 10 } },
+                new Place() { Amplua = 3, Position = 3, Player = new Player() { Name = "PL11", Number = 11 } },
+            };
+            List<Place> p2 = new List<Place>()
+            {
+                new Place() { Amplua = 0, Position = 2, Player = new Player() { Name = "PL1", Number = 1 } },
+                new Place() { Amplua = 1, Position = 0, Player = new Player() { Name = "PL2", Number = 2 } },
+                new Place() { Amplua = 1, Position = 1, Player = new Player() { Name = "PL3", Number = 3 } },
+                new Place() { Amplua = 1, Position = 2, Player = new Player() { Name = "PL4", Number = 4 } },
+                new Place() { Amplua = 1, Position = 3, Player = new Player() { Name = "PL5", Number = 5 } },
+                new Place() { Amplua = 2, Position = 1, Player = new Player() { Name = "PL6", Number = 6 } },
+                new Place() { Amplua = 2, Position = 2, Player = new Player() { Name = "PL7", Number = 7 } },
+                new Place() { Amplua = 2, Position = 3, Player = new Player() { Name = "PL8", Number = 8 } },
+                new Place() { Amplua = 2, Position = 4, Player = new Player() { Name = "PL9", Number = 9 } },
+                new Place() { Amplua = 3, Position = 2, Player = new Player() { Name = "PL10", Number = 10 } },
+                new Place() { Amplua = 3, Position = 3, Player = new Player() { Name = "PL11", Number = 11 } },
+            };
+            List<Place> p3 = new List<Place>()
+            {
+                new Place() { Amplua = 0, Position = 2, Player = new Player() { Name = "PL1", Number = 1 } },
+                new Place() { Amplua = 1, Position = 0, Player = new Player() { Name = "PL2", Number = 2 } },
+                new Place() { Amplua = 1, Position = 1, Player = new Player() { Name = "PL3", Number = 3 } },
+                new Place() { Amplua = 1, Position = 2, Player = new Player() { Name = "PL4", Number = 4 } },
+                new Place() { Amplua = 1, Position = 3, Player = new Player() { Name = "PL5", Number = 5 } },
+                new Place() { Amplua = 2, Position = 1, Player = new Player() { Name = "PL6", Number = 6 } },
+                new Place() { Amplua = 2, Position = 2, Player = new Player() { Name = "PL7", Number = 7 } },
+                new Place() { Amplua = 3, Position = 0, Player = new Player() { Name = "PL8", Number = 8 } },
+                new Place() { Amplua = 3, Position = 1, Player = new Player() { Name = "PL9", Number = 9 } },
+                new Place() { Amplua = 3, Position = 2, Player = new Player() { Name = "PL10", Number = 10 } },
+                new Place() { Amplua = 3, Position = 3, Player = new Player() { Name = "PL11", Number = 11 } },
+            };
+            List<Place> p4 = new List<Place>()
+            {
+                new Place() { Amplua = 0, Position = 2, Player = new Player() { Name = "PL1", Number = 1 } },
+                new Place() { Amplua = 1, Position = 0, Player = new Player() { Name = "PL2", Number = 2 } },
+                new Place() { Amplua = 1, Position = 2, Player = new Player() { Name = "PL3", Number = 3 } },
+                new Place() { Amplua = 1, Position = 3, Player = new Player() { Name = "PL4", Number = 4 } },
+                new Place() { Amplua = 1, Position = 4, Player = new Player() { Name = "PL5", Number = 5 } },
+                new Place() { Amplua = 3, Position = 1, Player = new Player() { Name = "PL6", Number = 6 } },
+                new Place() { Amplua = 2, Position = 2, Player = new Player() { Name = "PL7", Number = 7 } },
+                new Place() { Amplua = 3, Position = 3, Player = new Player() { Name = "PL8", Number = 8 } },
+                new Place() { Amplua = 4, Position = 1, Player = new Player() { Name = "PL9", Number = 9 } },
+                new Place() { Amplua = 5, Position = 2, Player = new Player() { Name = "PL10", Number = 10 } },
+                new Place() { Amplua = 4, Position = 3, Player = new Player() { Name = "PL11", Number = 11 } },
+            };
+            List<Place> p5 = new List<Place>()
+            {
+                new Place() { Amplua = 0, Position = 2, Player = new Player() { Name = "PL1", Number = 1 } },
+                new Place() { Amplua = 1, Position = 0, Player = new Player() { Name = "PL2", Number = 2 } },
+                new Place() { Amplua = 1, Position = 1, Player = new Player() { Name = "PL3", Number = 3 } },
+                new Place() { Amplua = 1, Position = 2, Player = new Player() { Name = "PL4", Number = 4 } },
+                new Place() { Amplua = 1, Position = 3, Player = new Player() { Name = "PL5", Number = 5 } },
+                new Place() { Amplua = 2, Position = 1, Player = new Player() { Name = "PL6", Number = 6 } },
+                new Place() { Amplua = 2, Position = 2, Player = new Player() { Name = "PL7", Number = 7 } },
+                new Place() { Amplua = 2, Position = 3, Player = new Player() { Name = "PL8", Number = 8 } },
+                new Place() { Amplua = 3, Position = 1, Player = new Player() { Name = "PL9", Number = 9 } },
+                new Place() { Amplua = 3, Position = 2, Player = new Player() { Name = "PL10", Number = 10 } },
+                new Place() { Amplua = 3, Position = 3, Player = new Player() { Name = "PL11", Number = 11 } },
+            };
+            List<Place> p6 = new List<Place>()
+            {
+                new Place() { Amplua = 0, Position = 2, Player = new Player() { Name = "PL1", Number = 1 } },
+                new Place() { Amplua = 1, Position = 0, Player = new Player() { Name = "PL2", Number = 2 } },
+                new Place() { Amplua = 1, Position = 1, Player = new Player() { Name = "PL3", Number = 3 } },
+                new Place() { Amplua = 1, Position = 2, Player = new Player() { Name = "PL4", Number = 4 } },
+                new Place() { Amplua = 1, Position = 3, Player = new Player() { Name = "PL5", Number = 5 } },
+                new Place() { Amplua = 2, Position = 1, Player = new Player() { Name = "PL6", Number = 6 } },
+                new Place() { Amplua = 2, Position = 2, Player = new Player() { Name = "PL7", Number = 7 } },
+                new Place() { Amplua = 2, Position = 3, Player = new Player() { Name = "PL8", Number = 8 } },
+                new Place() { Amplua = 2, Position = 4, Player = new Player() { Name = "PL9", Number = 9 } },
+                new Place() { Amplua = 3, Position = 2, Player = new Player() { Name = "PL10", Number = 10 } },
+                new Place() { Amplua = 3, Position = 3, Player = new Player() { Name = "PL11", Number = 11 } },
+            };
+            List<Place> p7 = new List<Place>()
+            {
+                new Place() { Amplua = 0, Position = 2, Player = new Player() { Name = "PL1", Number = 1 } },
+                new Place() { Amplua = 1, Position = 0, Player = new Player() { Name = "PL2", Number = 2 } },
+                new Place() { Amplua = 1, Position = 1, Player = new Player() { Name = "PL3", Number = 3 } },
+                new Place() { Amplua = 1, Position = 2, Player = new Player() { Name = "PL4", Number = 4 } },
+                new Place() { Amplua = 1, Position = 3, Player = new Player() { Name = "PL5", Number = 5 } },
+                new Place() { Amplua = 2, Position = 1, Player = new Player() { Name = "PL6", Number = 6 } },
+                new Place() { Amplua = 2, Position = 2, Player = new Player() { Name = "PL7", Number = 7 } },
+                new Place() { Amplua = 3, Position = 0, Player = new Player() { Name = "PL8", Number = 8 } },
+                new Place() { Amplua = 3, Position = 1, Player = new Player() { Name = "PL9", Number = 9 } },
+                new Place() { Amplua = 3, Position = 2, Player = new Player() { Name = "PL10", Number = 10 } },
+                new Place() { Amplua = 3, Position = 3, Player = new Player() { Name = "PL11", Number = 11 } },
+            };
+            Game.Team1.Tactics.Add(new Tactics(1, 0, p0));
+            Game.Team1.Tactics.Add(new Tactics(1, 1, p1));
+            Game.Team1.Tactics.Add(new Tactics(1, 2, p2));
+            Game.Team1.Tactics.Add(new Tactics(1, 3, p3));
+            Game.Team2.Tactics.Add(new Tactics(1, 0, p5));
+            Game.Team2.Tactics.Add(new Tactics(1, 1, p7));
+            Game.Team2.Tactics.Add(new Tactics(1, 2, p4));
+            Game.Team2.Tactics.Add(new Tactics(1, 3, p6));
+            Duration = 3;
+            bool[][] temp = new bool[5][] { new bool[6], new bool[6], new bool[6], new bool[6], new bool[6] };
             PlayPauseCommand = new RelayCommand<MediaElement>(x => PlayPauseMethod(x));
             ForwardCommand = new RelayCommand<MediaElement>(x => ForwardMethod(x));
             BackwardCommand = new RelayCommand<MediaElement>(x => BackwardMethod(x));
+            HideTacticsCommand = new RelayCommand<Grid>(x => HideTacticsMethod(x));
         }
         void PlayPauseMethod(MediaElement media)
         {
@@ -190,33 +286,33 @@ namespace PlayerRegistrator.ViewModel
             if (IsPlaying) media.Play();
             else media.Pause();
         }
-        private int[][] GetPositions(Tactics tact)
+        void HideTacticsMethod(Grid grid)
+        {
+            if (grid.Visibility == Visibility.Collapsed)
+            {
+                grid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                grid.Visibility = Visibility.Collapsed;
+            }
+        }
+        private int[][] GetPositions(Tactics tact, out bool[][] notAv)
         {
             int[][] res = new int[5][];
+            notAv = new bool[5][];
             for (int i = 0; i < res.Length; i++) 
             {
                 res[i] = new int[6];
+                notAv[i] = new bool[6];
             }
             foreach (Place item in tact)
             {
                 res[item.Position][item.Amplua] = item.Player.Number;
+                if (Game.DisabledPlayers.Contains(item.Player)) notAv[item.Position][item.Amplua] = true;
             }
             return res;
         }
-        //private RelayCommand<Ellipse> _recolor1;
-        //public RelayCommand<Ellipse> Recolor1
-        //{
-        //    get { return _recolor1; }
-        //}
-        //public void DoRecolor1(Ellipse ell)
-        //{
-        //    //foreach (Ellipse item in (ell.Parent as Grid).Children)
-        //    //{
-        //    //    item.Fill = new SolidColorBrush(Game.Team1.ShirtColor);
-        //    //}
-        //    //ell.Fill = new SolidColorBrush(Color.Subtract(((SolidColorBrush)ell.Fill).Color, Colors.Black));
-        //    ell.Fill = new SolidColorBrush(Colors.Black);
-        //}
         private RelayCommand<Button> _recolor1;
         public RelayCommand<Button> Recolor1
         {
@@ -225,14 +321,21 @@ namespace PlayerRegistrator.ViewModel
                 return _recolor1 ??
                     (_recolor1 = new RelayCommand<Button>(obj =>
                     {
-                        foreach (Button item in (obj.Parent as Grid).Children)
+                        if ((obj.Background as SolidColorBrush).Color != new SolidColorBrush(Game.Team1.ShirtColor).Color)
                         {
-                            item.Background = new SolidColorBrush(Game.Team1.ShirtColor);
+                            obj.Background = new SolidColorBrush(Game.Team1.ShirtColor);
                         }
-                        byte r = (byte)(255 - Game.Team1.ShirtColor.R);
-                        byte g = (byte)(255 - Game.Team1.ShirtColor.G);
-                        byte b = (byte)(255 - Game.Team1.ShirtColor.B);
-                        obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+                        else
+                        {
+                            foreach (Button item in (obj.Parent as Grid).Children)
+                            {
+                                item.Background = new SolidColorBrush(Game.Team1.ShirtColor);
+                            }
+                            byte r = (byte)(255 - Game.Team1.ShirtColor.R);
+                            byte g = (byte)(255 - Game.Team1.ShirtColor.G);
+                            byte b = (byte)(255 - Game.Team1.ShirtColor.B);
+                            obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+                        }
                     }));
             }
         }
@@ -244,15 +347,93 @@ namespace PlayerRegistrator.ViewModel
                 return _recolor2 ??
                     (_recolor2 = new RelayCommand<Button>(obj =>
                     {
-                        foreach (Button item in (obj.Parent as Grid).Children)
+                        if ((obj.Background as SolidColorBrush).Color != new SolidColorBrush(Game.Team2.ShirtColor).Color)
                         {
-                            item.Background = new SolidColorBrush(Game.Team2.ShirtColor);
+                            obj.Background = new SolidColorBrush(Game.Team2.ShirtColor);
                         }
-                        byte r = (byte)(255 - Game.Team2.ShirtColor.R);
-                        byte g = (byte)(255 - Game.Team2.ShirtColor.G);
-                        byte b = (byte)(255 - Game.Team2.ShirtColor.B);
-                        obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+                        else
+                        {
+                            foreach (Button item in (obj.Parent as Grid).Children)
+                            {
+                                item.Background = new SolidColorBrush(Game.Team2.ShirtColor);
+                            }
+                            byte r = (byte)(255 - Game.Team2.ShirtColor.R);
+                            byte g = (byte)(255 - Game.Team2.ShirtColor.G);
+                            byte b = (byte)(255 - Game.Team2.ShirtColor.B);
+                            obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+                        }
                     }));
+            }
+        }
+        private RelayCommand<Grid> _sliderValueChanged;
+        public RelayCommand<Grid> SliderValueChanged
+        {
+            get
+            {
+                return _sliderValueChanged ??
+                    (_sliderValueChanged = new RelayCommand<Grid>(obj =>
+                    {
+                        Grid grid1 = obj.Children[0] as Grid;
+                        Grid grid2 = obj.Children[1] as Grid;
+                        bool[][] notAv1;
+                        bool[][] notAv2;
+                        int[][] pos1 = GetPositions(Game.GetCurrent(Game.Team1), out notAv1);
+                        Tactics1 = pos1;
+                        int[][] pos2 = GetPositions(Game.GetCurrent(Game.Team2), out notAv2);
+                        Tactics2 = pos2;
+                        ResetButtons(grid1, 1);
+                        ResetButtons(grid2, 2);
+
+                        if (notAv1[2][0]) (grid1.Children[0] as Button).IsEnabled = false;
+                        
+                        int k = 1;
+                        for (int j = 1; j < 6; j++)
+                        {
+                            for (int i = 0; i < 5; i++)
+                            {
+                                if (pos1[i][j] != 0)
+                                {                                    
+                                    if (notAv1[i][j]) (grid1.Children[k] as Button).IsEnabled = false;
+                                }
+                                else (grid1.Children[k] as Button).Visibility = Visibility.Hidden;
+                                k++;
+                            }
+                        }
+                        k = 1;
+                        int length = grid2.Children.Count;
+                        if (notAv2[2][0]) (grid2.Children[length - k] as Button).IsEnabled = false;
+                        k++;
+                        for (int j = 1; j < 6; j++)
+                        {
+                            for (int i = 0; i < 5; i++)
+                            {
+                                if (pos2[i][j] != 0)
+                                {
+                                    if (notAv2[i][j]) (grid2.Children[length - k] as Button).IsEnabled = false;
+                                }
+                                else (grid2.Children[length - k] as Button).Visibility = Visibility.Hidden;
+                                k++;
+                            }
+                        }
+                    }));
+            }
+        }
+        void ResetButtons(Grid grid, int team)
+        {
+            foreach (Button item in grid.Children)
+            {
+                item.IsEnabled = true;
+                item.Visibility = Visibility.Visible;
+                switch (team)
+                {
+                    case 1:
+                        item.Background = new SolidColorBrush(Game.Team1.ShirtColor);
+                        break;
+                    case 2:
+                        item.Background = new SolidColorBrush(Game.Team2.ShirtColor);
+                        break;
+                }
+                
             }
         }
         ////public override void Cleanup()

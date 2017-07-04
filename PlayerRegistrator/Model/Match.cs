@@ -10,7 +10,6 @@ namespace PlayerRegistrator.Model
     public class Match
     {
         public Team Team1 { get; set; }
-        public Color Col { get; set; }
         public Team Team2 { get; set; }
         public int Half { get; set; } //Номер тайма (1..2)
         public int TimeVideo { get; set; } //Текущая секунда времени видео
