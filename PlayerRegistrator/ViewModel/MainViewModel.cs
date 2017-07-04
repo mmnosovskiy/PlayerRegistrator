@@ -1,16 +1,13 @@
-﻿using Apex.MVVM;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using PlayerRegistrator.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Linq;
-using System.Windows.Shapes;
 
 namespace PlayerRegistrator.ViewModel
 {
@@ -28,6 +25,8 @@ namespace PlayerRegistrator.ViewModel
         public RelayCommand<MediaElement> ForwardCommand { get; set; }
         public RelayCommand<MediaElement> BackwardCommand { get; set; }
         public RelayCommand<Grid> HideTacticsCommand { get; set; }
+        public RelayCommand<Button> ReColor1 { get; set; }
+        public RelayCommand<Button> ReColor2 { get; set; }
 
 
         private double _duration;
@@ -126,7 +125,7 @@ namespace PlayerRegistrator.ViewModel
                 TimeVideo = 0,
                 Team1 = new Team() { NumberColor = Colors.White, ShirtColor = Colors.DarkRed, Tactics = new List<Tactics>() },
                 Team2 = new Team() { NumberColor = Colors.White, ShirtColor = Colors.Purple, Tactics = new List<Tactics>() },
-                DisabledPlayers = new List<Player>() { new Player() { Name = "PL8", Number = 8 } }
+                DisabledPlayers = new List<Player>() { new Player() { Name = "PL8", Number = 8 }, new Player() { Name = "PL2", Number = 2 } }
             };
             IsPlaying = true;
             List<Place> p0 = new List<Place>()
@@ -255,6 +254,8 @@ namespace PlayerRegistrator.ViewModel
             ForwardCommand = new RelayCommand<MediaElement>(x => ForwardMethod(x));
             BackwardCommand = new RelayCommand<MediaElement>(x => BackwardMethod(x));
             HideTacticsCommand = new RelayCommand<Grid>(x => HideTacticsMethod(x));
+            ReColor1 = new RelayCommand<Button>(ReColor1Method);
+            ReColor2 = new RelayCommand<Button>(ReColor2Method);
         }
         void PlayPauseMethod(MediaElement media)
         {
@@ -309,60 +310,44 @@ namespace PlayerRegistrator.ViewModel
             foreach (Place item in tact)
             {
                 res[item.Position][item.Amplua] = item.Player.Number;
-                if (Game.DisabledPlayers.Contains(item.Player)) notAv[item.Position][item.Amplua] = true;
+                if (Game.DisabledPlayers.Contains(item.Player, new PlayerComparer())) notAv[item.Position][item.Amplua] = true;
             }
             return res;
         }
-        private RelayCommand<Button> _recolor1;
-        public RelayCommand<Button> Recolor1
+        void ReColor1Method(Button obj)
         {
-            get
+            if ((obj.Background as SolidColorBrush).Color != new SolidColorBrush(Game.Team1.ShirtColor).Color)
             {
-                return _recolor1 ??
-                    (_recolor1 = new RelayCommand<Button>(obj =>
-                    {
-                        if ((obj.Background as SolidColorBrush).Color != new SolidColorBrush(Game.Team1.ShirtColor).Color)
-                        {
-                            obj.Background = new SolidColorBrush(Game.Team1.ShirtColor);
-                        }
-                        else
-                        {
-                            foreach (Button item in (obj.Parent as Grid).Children)
-                            {
-                                item.Background = new SolidColorBrush(Game.Team1.ShirtColor);
-                            }
-                            byte r = (byte)(255 - Game.Team1.ShirtColor.R);
-                            byte g = (byte)(255 - Game.Team1.ShirtColor.G);
-                            byte b = (byte)(255 - Game.Team1.ShirtColor.B);
-                            obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
-                        }
-                    }));
+                obj.Background = new SolidColorBrush(Game.Team1.ShirtColor);
+            }
+            else
+            {
+                foreach (Button item in (obj.Parent as Grid).Children)
+                {
+                    if (item.IsEnabled) item.Background = new SolidColorBrush(Game.Team1.ShirtColor);
+                }
+                byte r = (byte)(255 - Game.Team1.ShirtColor.R);
+                byte g = (byte)(255 - Game.Team1.ShirtColor.G);
+                byte b = (byte)(255 - Game.Team1.ShirtColor.B);
+                obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
             }
         }
-        private RelayCommand<Button> _recolor2;
-        public RelayCommand<Button> Recolor2
+        void ReColor2Method(Button obj)
         {
-            get
+            if ((obj.Background as SolidColorBrush).Color != new SolidColorBrush(Game.Team2.ShirtColor).Color)
             {
-                return _recolor2 ??
-                    (_recolor2 = new RelayCommand<Button>(obj =>
-                    {
-                        if ((obj.Background as SolidColorBrush).Color != new SolidColorBrush(Game.Team2.ShirtColor).Color)
-                        {
-                            obj.Background = new SolidColorBrush(Game.Team2.ShirtColor);
-                        }
-                        else
-                        {
-                            foreach (Button item in (obj.Parent as Grid).Children)
-                            {
-                                item.Background = new SolidColorBrush(Game.Team2.ShirtColor);
-                            }
-                            byte r = (byte)(255 - Game.Team2.ShirtColor.R);
-                            byte g = (byte)(255 - Game.Team2.ShirtColor.G);
-                            byte b = (byte)(255 - Game.Team2.ShirtColor.B);
-                            obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
-                        }
-                    }));
+                obj.Background = new SolidColorBrush(Game.Team2.ShirtColor);
+            }
+            else
+            {
+                foreach (Button item in (obj.Parent as Grid).Children)
+                {
+                    if (item.IsEnabled) item.Background = new SolidColorBrush(Game.Team2.ShirtColor);
+                }
+                byte r = (byte)(255 - Game.Team2.ShirtColor.R);
+                byte g = (byte)(255 - Game.Team2.ShirtColor.G);
+                byte b = (byte)(255 - Game.Team2.ShirtColor.B);
+                obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
             }
         }
         private RelayCommand<Grid> _sliderValueChanged;
@@ -392,8 +377,13 @@ namespace PlayerRegistrator.ViewModel
                             for (int i = 0; i < 5; i++)
                             {
                                 if (pos1[i][j] != 0)
-                                {                                    
-                                    if (notAv1[i][j]) (grid1.Children[k] as Button).IsEnabled = false;
+                                {
+                                    if (notAv1[i][j])
+                                    {
+                                        (grid1.Children[k] as Button).IsEnabled = false;
+                                        (grid1.Children[k] as Button).Opacity = 50;
+                                        (grid1.Children[k] as Button).Background = new SolidColorBrush(Colors.LightGray);
+                                    }
                                 }
                                 else (grid1.Children[k] as Button).Visibility = Visibility.Hidden;
                                 k++;
@@ -409,7 +399,12 @@ namespace PlayerRegistrator.ViewModel
                             {
                                 if (pos2[i][j] != 0)
                                 {
-                                    if (notAv2[i][j]) (grid2.Children[length - k] as Button).IsEnabled = false;
+                                    if (notAv2[i][j])
+                                    {
+                                        (grid2.Children[length - k] as Button).IsEnabled = false;
+                                        (grid2.Children[length - k] as Button).Opacity = 50;
+                                        (grid2.Children[length - k] as Button).Background = new SolidColorBrush(Colors.LightGray);
+                                    }
                                 }
                                 else (grid2.Children[length - k] as Button).Visibility = Visibility.Hidden;
                                 k++;
@@ -424,6 +419,7 @@ namespace PlayerRegistrator.ViewModel
             {
                 item.IsEnabled = true;
                 item.Visibility = Visibility.Visible;
+                item.Opacity = 100;
                 switch (team)
                 {
                     case 1:
