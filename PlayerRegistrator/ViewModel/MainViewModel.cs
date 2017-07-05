@@ -29,8 +29,8 @@ namespace PlayerRegistrator.ViewModel
         public RelayCommand<Button> ReColor2 { get; set; }
 
 
-        private double _duration;
-        public double Duration
+        private int _duration;
+        public int Duration
         {
             get
             {
@@ -248,7 +248,6 @@ namespace PlayerRegistrator.ViewModel
             Game.Team2.Tactics.Add(new Tactics(1, 1, p7));
             Game.Team2.Tactics.Add(new Tactics(1, 2, p4));
             Game.Team2.Tactics.Add(new Tactics(1, 3, p6));
-            Duration = 3;
             bool[][] temp = new bool[5][] { new bool[6], new bool[6], new bool[6], new bool[6], new bool[6] };
             PlayPauseCommand = new RelayCommand<MediaElement>(x => PlayPauseMethod(x));
             ForwardCommand = new RelayCommand<MediaElement>(x => ForwardMethod(x));
@@ -358,58 +357,93 @@ namespace PlayerRegistrator.ViewModel
                 return _sliderValueChanged ??
                     (_sliderValueChanged = new RelayCommand<Grid>(obj =>
                     {
-                        Grid grid1 = obj.Children[0] as Grid;
-                        Grid grid2 = obj.Children[1] as Grid;
-                        bool[][] notAv1;
-                        bool[][] notAv2;
-                        int[][] pos1 = GetPositions(Game.GetCurrent(Game.Team1), out notAv1);
-                        Tactics1 = pos1;
-                        int[][] pos2 = GetPositions(Game.GetCurrent(Game.Team2), out notAv2);
-                        Tactics2 = pos2;
-                        ResetButtons(grid1, 1);
-                        ResetButtons(grid2, 2);
+                        try
+                        {
+                            Grid grid1 = obj.Children[0] as Grid;
+                            Grid grid2 = obj.Children[1] as Grid;
+                            bool[][] notAv1;
+                            bool[][] notAv2;
+                            int[][] pos1 = GetPositions(Game.GetCurrent(Game.Team1), out notAv1);
+                            Tactics1 = pos1;
 
-                        if (notAv1[2][0]) (grid1.Children[0] as Button).IsEnabled = false;
-                        
-                        int k = 1;
-                        for (int j = 1; j < 6; j++)
-                        {
-                            for (int i = 0; i < 5; i++)
+                            ResetButtons(grid1, 1);
+
+
+                            if (notAv1[2][0]) (grid1.Children[0] as Button).IsEnabled = false;
+
+                            int k = 1;
+                            for (int j = 1; j < 6; j++)
                             {
-                                if (pos1[i][j] != 0)
+                                for (int i = 0; i < 5; i++)
                                 {
-                                    if (notAv1[i][j])
+                                    if (pos1[i][j] != 0)
                                     {
-                                        (grid1.Children[k] as Button).IsEnabled = false;
-                                        (grid1.Children[k] as Button).Opacity = 50;
-                                        (grid1.Children[k] as Button).Background = new SolidColorBrush(Colors.LightGray);
+                                        if (notAv1[i][j])
+                                        {
+                                            (grid1.Children[k] as Button).IsEnabled = false;
+                                            (grid1.Children[k] as Button).Opacity = 50;
+                                            (grid1.Children[k] as Button).Background = new SolidColorBrush(Colors.LightGray);
+                                        }
                                     }
+                                    else (grid1.Children[k] as Button).Visibility = Visibility.Hidden;
+                                    k++;
                                 }
-                                else (grid1.Children[k] as Button).Visibility = Visibility.Hidden;
-                                k++;
+                            }
+                            int[][] pos2 = GetPositions(Game.GetCurrent(Game.Team2), out notAv2);
+                            Tactics2 = pos2;
+                            ResetButtons(grid2, 2);
+                            k = 1;
+                            int length = grid2.Children.Count;
+                            if (notAv2[2][0]) (grid2.Children[length - k] as Button).IsEnabled = false;
+                            k++;
+                            for (int j = 1; j < 6; j++)
+                            {
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    if (pos2[i][j] != 0)
+                                    {
+                                        if (notAv2[i][j])
+                                        {
+                                            (grid2.Children[length - k] as Button).IsEnabled = false;
+                                            (grid2.Children[length - k] as Button).Opacity = 50;
+                                            (grid2.Children[length - k] as Button).Background = new SolidColorBrush(Colors.LightGray);
+                                        }
+                                    }
+                                    else (grid2.Children[length - k] as Button).Visibility = Visibility.Hidden;
+                                    k++;
+                                }
                             }
                         }
-                        k = 1;
-                        int length = grid2.Children.Count;
-                        if (notAv2[2][0]) (grid2.Children[length - k] as Button).IsEnabled = false;
-                        k++;
-                        for (int j = 1; j < 6; j++)
+                        catch
                         {
-                            for (int i = 0; i < 5; i++)
-                            {
-                                if (pos2[i][j] != 0)
-                                {
-                                    if (notAv2[i][j])
-                                    {
-                                        (grid2.Children[length - k] as Button).IsEnabled = false;
-                                        (grid2.Children[length - k] as Button).Opacity = 50;
-                                        (grid2.Children[length - k] as Button).Background = new SolidColorBrush(Colors.LightGray);
-                                    }
-                                }
-                                else (grid2.Children[length - k] as Button).Visibility = Visibility.Hidden;
-                                k++;
-                            }
+
                         }
+                    }));
+            }
+        }
+        private RelayCommand<MediaElement> _updateVideoPosition;
+        public RelayCommand<MediaElement> UpdateVideoPosition
+        {
+            get
+            {
+                return _updateVideoPosition ??
+                    (_updateVideoPosition = new RelayCommand<MediaElement>(obj =>
+                    {
+                        MediaElement media = obj as MediaElement;
+                        media.Position = new TimeSpan(0, 0, 0, 0, Game.TimeVideo);
+                    }));
+            }
+        }
+        private RelayCommand<MediaElement> _getDuration;
+        public RelayCommand<MediaElement> GetDuration
+        {
+            get
+            {
+                return _getDuration ??
+                    (_getDuration = new RelayCommand<MediaElement>(obj =>
+                    {
+                        MediaElement media = obj as MediaElement;
+                        Duration = (int)media.NaturalDuration.TimeSpan.TotalMilliseconds;
                     }));
             }
         }

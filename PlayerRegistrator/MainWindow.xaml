@@ -171,9 +171,15 @@
                     <Button Name="Button2_3_1" Template="{StaticResource btTemplate2}" Grid.Row="2" Grid.Column="5" Content="{Binding Tactics2[2][0], Mode=OneWay}" Command="{Binding ReColor2}" CommandParameter="{Binding ElementName=Button2_3_1}"></Button>
                 </Grid>
             </Grid>
-            
+
             <Border Grid.Row="2" BorderThickness="1" BorderBrush="Black" Margin="5" ClipToBounds="True">
-                <MediaElement Focusable="True" Name="media" LoadedBehavior="Manual" Margin="5" ScrubbingEnabled="True" Source="C:\Users\А\Downloads\Загрузки uTorrent\Forsazh_2001_BDRip_by_Dalemake.avi" ></MediaElement>
+                <MediaElement Focusable="True" Name="media" LoadedBehavior="Manual" Margin="5" ScrubbingEnabled="True" Source="C:\Users\А\Downloads\Загрузки uTorrent\Forsazh_2001_BDRip_by_Dalemake.avi" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MediaOpened">
+                            <i:InvokeCommandAction Command="{Binding GetDuration}" CommandParameter="{Binding ElementName=media}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MediaElement>
             </Border>
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
@@ -181,18 +187,24 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Margin="5" Content="{Binding Game.TimeVideo}" VerticalContentAlignment="Center"></Label>
+                <Label Grid.Column="0" Margin="5" Content="{Binding Game.TimeVideo, Converter={StaticResource TimeToStringConverter}}" VerticalContentAlignment="Center"></Label>
                 <Slider Name="Slider1" Grid.Column="1" Value="{Binding Game.TimeVideo, Mode=TwoWay}" VerticalAlignment="Center" Margin="5" Maximum="{Binding Duration}" SmallChange="0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="ValueChanged">
                             <i:InvokeCommandAction Command="{Binding SliderValueChanged}" CommandParameter="{Binding ElementName=tacticsGrid}" />
+                            <i:InvokeCommandAction Command="{Binding UpdateVideoPosition}" CommandParameter="{Binding ElementName=media}" />
                         </i:EventTrigger>
                         <i:EventTrigger EventName="Loaded">
                             <i:InvokeCommandAction Command="{Binding SliderValueChanged}" CommandParameter="{Binding ElementName=tacticsGrid}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Slider>
-                <Label Grid.Column="2" Content="{Binding Duration}" VerticalContentAlignment="Center" Margin="5"></Label>
+                <Label Grid.Column="2" Content="{Binding Duration, Converter={StaticResource TimeToStringConverter}}" VerticalContentAlignment="Center" Margin="5"></Label>
+
+
+
+
+
             </Grid>
         </Grid>
         <ListView Grid.Column="1" Margin="5">
