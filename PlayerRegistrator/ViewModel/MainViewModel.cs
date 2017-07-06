@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Linq;
+using System.Windows.Threading;
 
 namespace PlayerRegistrator.ViewModel
 {
@@ -28,6 +29,27 @@ namespace PlayerRegistrator.ViewModel
         public RelayCommand<Button> ReColor1 { get; set; }
         public RelayCommand<Button> ReColor2 { get; set; }
 
+        public TimeSpan GameTimeSpan
+        {
+            get { return TimeSpan.FromMilliseconds(Game.TimeVideo); }
+            set
+            {
+                Game.TimeVideo = Convert.ToInt32(value.TotalMilliseconds);
+                RaisePropertyChanged("GameTime");
+                RaisePropertyChanged("GameTimeSpan");
+            }
+        }
+
+        public int GameTime
+        {
+            get { return Game.TimeVideo; }
+            set
+            {
+                Game.TimeVideo = value;
+                RaisePropertyChanged("GameTime");
+                RaisePropertyChanged("GameTimeSpan");
+            }
+        }
 
         private int _duration;
         public int Duration
@@ -89,19 +111,7 @@ namespace PlayerRegistrator.ViewModel
                 Set(ref _tactics2, value);
             }
         }
-        private Stopwatch _watch;
-        public Stopwatch Watch
-        {
-            get
-            {
-                return _watch;
-            }
-            set
-            {
-                Set(ref _watch, value);
-            }
-        }
-        
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -118,7 +128,8 @@ namespace PlayerRegistrator.ViewModel
             //            return;
             //        }
             //    });
-            
+            List1 = new List<int>();
+            List2 = new List<int>();
             Game = new Match()
             {
                 Half = 1,
@@ -240,14 +251,14 @@ namespace PlayerRegistrator.ViewModel
                 new Place() { Amplua = 3, Position = 2, Player = new Player() { Name = "PL10", Number = 10 } },
                 new Place() { Amplua = 3, Position = 3, Player = new Player() { Name = "PL11", Number = 11 } },
             };
-            Game.Team1.Tactics.Add(new Tactics(1, 0, p0));
-            Game.Team1.Tactics.Add(new Tactics(1, 1, p1));
-            Game.Team1.Tactics.Add(new Tactics(1, 2, p2));
-            Game.Team1.Tactics.Add(new Tactics(1, 3, p3));
-            Game.Team2.Tactics.Add(new Tactics(1, 0, p5));
-            Game.Team2.Tactics.Add(new Tactics(1, 1, p7));
-            Game.Team2.Tactics.Add(new Tactics(1, 2, p4));
-            Game.Team2.Tactics.Add(new Tactics(1, 3, p6));
+            Game.Team1.Tactics.Add(new Tactics(1, 500, p0));
+            Game.Team1.Tactics.Add(new Tactics(1, 1000, p1));
+            Game.Team1.Tactics.Add(new Tactics(1, 2000, p2));
+            Game.Team1.Tactics.Add(new Tactics(1, 20000, p3));
+            Game.Team2.Tactics.Add(new Tactics(1, 200, p5));
+            Game.Team2.Tactics.Add(new Tactics(1, 1000, p7));
+            Game.Team2.Tactics.Add(new Tactics(1, 2000, p4));
+            Game.Team2.Tactics.Add(new Tactics(1, 3000, p6));
             bool[][] temp = new bool[5][] { new bool[6], new bool[6], new bool[6], new bool[6], new bool[6] };
             PlayPauseCommand = new RelayCommand<MediaElement>(x => PlayPauseMethod(x));
             ForwardCommand = new RelayCommand<MediaElement>(x => ForwardMethod(x));
@@ -301,7 +312,7 @@ namespace PlayerRegistrator.ViewModel
         {
             int[][] res = new int[5][];
             notAv = new bool[5][];
-            for (int i = 0; i < res.Length; i++) 
+            for (int i = 0; i < res.Length; i++)
             {
                 res[i] = new int[6];
                 notAv[i] = new bool[6];
@@ -318,17 +329,19 @@ namespace PlayerRegistrator.ViewModel
             if ((obj.Background as SolidColorBrush).Color != new SolidColorBrush(Game.Team1.ShirtColor).Color)
             {
                 obj.Background = new SolidColorBrush(Game.Team1.ShirtColor);
+                List1.Remove(Convert.ToInt32(obj.Content));
             }
             else
             {
-                foreach (Button item in (obj.Parent as Grid).Children)
-                {
-                    if (item.IsEnabled) item.Background = new SolidColorBrush(Game.Team1.ShirtColor);
-                }
+                //foreach (Button item in (obj.Parent as Grid).Children)
+                //{
+                //    if (item.IsEnabled) item.Background = new SolidColorBrush(Game.Team1.ShirtColor);
+                //}
                 byte r = (byte)(255 - Game.Team1.ShirtColor.R);
                 byte g = (byte)(255 - Game.Team1.ShirtColor.G);
                 byte b = (byte)(255 - Game.Team1.ShirtColor.B);
                 obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+                List1.Add(Convert.ToInt32(obj.Content));
             }
         }
         void ReColor2Method(Button obj)
@@ -336,18 +349,29 @@ namespace PlayerRegistrator.ViewModel
             if ((obj.Background as SolidColorBrush).Color != new SolidColorBrush(Game.Team2.ShirtColor).Color)
             {
                 obj.Background = new SolidColorBrush(Game.Team2.ShirtColor);
+                List2.Remove(Convert.ToInt32(obj.Content));
             }
             else
             {
-                foreach (Button item in (obj.Parent as Grid).Children)
-                {
-                    if (item.IsEnabled) item.Background = new SolidColorBrush(Game.Team2.ShirtColor);
-                }
+                //foreach (Button item in (obj.Parent as Grid).Children)
+                //{
+                //    if (item.IsEnabled) item.Background = new SolidColorBrush(Game.Team2.ShirtColor);
+                //}
                 byte r = (byte)(255 - Game.Team2.ShirtColor.R);
                 byte g = (byte)(255 - Game.Team2.ShirtColor.G);
                 byte b = (byte)(255 - Game.Team2.ShirtColor.B);
                 obj.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+                List2.Add(Convert.ToInt32(obj.Content));
             }
+        }
+        List<int> List1 { get; set; }
+        List<int> List2 { get; set; }
+        Color ReverseColor(Color source)
+        {
+            byte r = (byte)(255 - source.R);
+            byte g = (byte)(255 - source.G);
+            byte b = (byte)(255 - source.B);
+            return Color.FromRgb(r, g, b);
         }
         private RelayCommand<Grid> _sliderValueChanged;
         public RelayCommand<Grid> SliderValueChanged
@@ -357,16 +381,17 @@ namespace PlayerRegistrator.ViewModel
                 return _sliderValueChanged ??
                     (_sliderValueChanged = new RelayCommand<Grid>(obj =>
                     {
-                        try
-                        {
+                        
                             Grid grid1 = obj.Children[0] as Grid;
                             Grid grid2 = obj.Children[1] as Grid;
                             bool[][] notAv1;
                             bool[][] notAv2;
+                        try
+                        {
                             int[][] pos1 = GetPositions(Game.GetCurrent(Game.Team1), out notAv1);
                             Tactics1 = pos1;
 
-                            ResetButtons(grid1, 1);
+                            ColoredPlayers(grid1, 1);
 
 
                             if (notAv1[2][0]) (grid1.Children[0] as Button).IsEnabled = false;
@@ -381,18 +406,26 @@ namespace PlayerRegistrator.ViewModel
                                         if (notAv1[i][j])
                                         {
                                             (grid1.Children[k] as Button).IsEnabled = false;
-                                            (grid1.Children[k] as Button).Opacity = 50;
                                             (grid1.Children[k] as Button).Background = new SolidColorBrush(Colors.LightGray);
                                         }
+                                        if (List1.Contains(pos1[i][j])) (grid1.Children[k] as Button).Background = new SolidColorBrush(ReverseColor(Game.Team1.ShirtColor));
+                                       
                                     }
                                     else (grid1.Children[k] as Button).Visibility = Visibility.Hidden;
                                     k++;
                                 }
                             }
+                        }
+                        catch
+                        {
+
+                        }
+                        try
+                        { 
                             int[][] pos2 = GetPositions(Game.GetCurrent(Game.Team2), out notAv2);
                             Tactics2 = pos2;
-                            ResetButtons(grid2, 2);
-                            k = 1;
+                            ColoredPlayers(grid2, 2);
+                            int k = 1;
                             int length = grid2.Children.Count;
                             if (notAv2[2][0]) (grid2.Children[length - k] as Button).IsEnabled = false;
                             k++;
@@ -405,9 +438,10 @@ namespace PlayerRegistrator.ViewModel
                                         if (notAv2[i][j])
                                         {
                                             (grid2.Children[length - k] as Button).IsEnabled = false;
-                                            (grid2.Children[length - k] as Button).Opacity = 50;
                                             (grid2.Children[length - k] as Button).Background = new SolidColorBrush(Colors.LightGray);
                                         }
+                                        if (List2.Contains(pos2[i][j])) (grid2.Children[length - k] as Button).Background = new SolidColorBrush(ReverseColor(Game.Team2.ShirtColor));
+                                        
                                     }
                                     else (grid2.Children[length - k] as Button).Visibility = Visibility.Hidden;
                                     k++;
@@ -421,19 +455,6 @@ namespace PlayerRegistrator.ViewModel
                     }));
             }
         }
-        private RelayCommand<MediaElement> _updateVideoPosition;
-        public RelayCommand<MediaElement> UpdateVideoPosition
-        {
-            get
-            {
-                return _updateVideoPosition ??
-                    (_updateVideoPosition = new RelayCommand<MediaElement>(obj =>
-                    {
-                        MediaElement media = obj as MediaElement;
-                        media.Position = new TimeSpan(0, 0, 0, 0, Game.TimeVideo);
-                    }));
-            }
-        }
         private RelayCommand<MediaElement> _getDuration;
         public RelayCommand<MediaElement> GetDuration
         {
@@ -444,27 +465,40 @@ namespace PlayerRegistrator.ViewModel
                     {
                         MediaElement media = obj as MediaElement;
                         Duration = (int)media.NaturalDuration.TimeSpan.TotalMilliseconds;
+
+                        
                     }));
             }
         }
-        void ResetButtons(Grid grid, int team)
+
+        
+        void ColoredPlayers(Grid grid, int team)
         {
+            //List<int> res = new List<int>();
             foreach (Button item in grid.Children)
             {
-                item.IsEnabled = true;
-                item.Visibility = Visibility.Visible;
-                item.Opacity = 100;
+                
                 switch (team)
                 {
                     case 1:
+                        //if ((item.Background as SolidColorBrush).Color != Game.Team1.ShirtColor && (item.Background as SolidColorBrush).Color != Colors.LightGray && item.Visibility == Visibility.Visible)
+                        //{
+                        //    res.Add(Convert.ToInt32(item.Content));
+                        //}
                         item.Background = new SolidColorBrush(Game.Team1.ShirtColor);
                         break;
                     case 2:
+                        //if ((item.Background as SolidColorBrush).Color != Game.Team2.ShirtColor && (item.Background as SolidColorBrush).Color != Colors.LightGray && item.Visibility == Visibility.Visible)
+                        //{
+                        //    res.Add(Convert.ToInt32(item.Content));
+                        //}
                         item.Background = new SolidColorBrush(Game.Team2.ShirtColor);
                         break;
                 }
-                
+                item.IsEnabled = true;
+                item.Visibility = Visibility.Visible;
             }
+            //return res;
         }
         ////public override void Cleanup()
         ////{

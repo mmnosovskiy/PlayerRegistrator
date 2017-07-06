@@ -9,10 +9,11 @@
         xmlns:apexCommands="clr-namespace:Apex.Commands;assembly=Apex"
         xmlns:apexControls="clr-namespace:Apex.Controls;assembly=Apex"
         xmlns:apexConverters="clr-namespace:Apex.Converters;assembly=Apex"
+        xmlns:local="clr-namespace:PlayerRegistrator"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d ignore"
         Height="600"
-        Width="700"
+        Width="900"
         Title="Registrator"
         DataContext="{Binding Path=Main, Source={StaticResource Locator}}"
         Background="AliceBlue">
@@ -39,18 +40,35 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBox Grid.Row="0" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">TextBox1</TextBox>
-            <Grid Name="tacticsGrid" MinHeight="240" Grid.Row="1">
+            <MediaElement 
+                    Grid.Row="1"
+                    Panel.ZIndex="0"
+                    local:MediaElementExtension.BindablePosition="{Binding GameTimeSpan, Mode=TwoWay}"
+                    Focusable="True"                     
+                    Stretch="None"
+                    Name="media"
+                    LoadedBehavior="Manual"
+                    Margin="5" 
+                    ScrubbingEnabled="True" 
+                    Source="C:\Users\А\Downloads\Загрузки uTorrent\Forsazh_2001_BDRip_by_Dalemake.avi"
+                    MediaOpened="media_MediaOpened">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MediaOpened">
+                        <i:InvokeCommandAction Command="{Binding GetDuration}" CommandParameter="{Binding ElementName=media}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </MediaElement>
+            <Grid Name="tacticsGrid" MinHeight="240" Grid.Row="1" Panel.ZIndex="1" Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-            
-                <Grid Grid.Column="0" Margin="5" VerticalAlignment="Stretch">
+
+                <Grid Grid.Column="0" Margin="5" VerticalAlignment="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
@@ -72,7 +90,7 @@
                             <Setter Property="Background" Value="{StaticResource firstTeamShirt}"></Setter>
                         </Style>
                         <ControlTemplate TargetType="Button" x:Key="btTemplate1">
-                            <Border CornerRadius="1000" BorderBrush="Black" BorderThickness="1" Background="{TemplateBinding Background}" Margin="2">
+                            <Border CornerRadius="1000" MinHeight="50" MinWidth="50" BorderBrush="Black" BorderThickness="1" Background="{TemplateBinding Background}" Margin="2">
                                 <ContentControl 
                                     Margin="{TemplateBinding Margin}" 
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
@@ -109,9 +127,9 @@
                     <Button Name="Button1_3_6" Template="{StaticResource btTemplate1}" Grid.Row="2" Grid.Column="5" Content="{Binding Tactics1[2][5], Mode=OneWay}" Command="{Binding ReColor1}" CommandParameter="{Binding ElementName=Button1_3_6}"></Button>
                     <Button Name="Button1_4_6" Template="{StaticResource btTemplate1}" Grid.Row="3" Grid.Column="5" Content="{Binding Tactics1[3][5], Mode=OneWay}" Command="{Binding ReColor1}" CommandParameter="{Binding ElementName=Button1_4_6}"></Button>
                     <Button Name="Button1_5_6" Template="{StaticResource btTemplate1}" Grid.Row="4" Grid.Column="5" Content="{Binding Tactics1[4][5], Mode=OneWay}" Command="{Binding ReColor1}" CommandParameter="{Binding ElementName=Button1_5_6}"></Button>
-                    
+
                 </Grid>
-                <Grid Grid.Column="1" Margin="5" VerticalAlignment="Stretch">
+                <Grid Grid.Column="1" Margin="5" VerticalAlignment="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
@@ -132,7 +150,7 @@
                             <Setter Property="Background" Value="{StaticResource secondTeamShirt}"></Setter>
                         </Style>
                         <ControlTemplate TargetType="Button" x:Key="btTemplate2">
-                            <Border CornerRadius="1000" BorderBrush="Black" BorderThickness="1" Background="{TemplateBinding Background}" Margin="2">
+                            <Border CornerRadius="1000" MinHeight="50" MinWidth="50" BorderBrush="Black" BorderThickness="1" Background="{TemplateBinding Background}" Margin="2">
                                 <ContentControl 
                                     Margin="{TemplateBinding Margin}" 
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
@@ -172,27 +190,32 @@
                 </Grid>
             </Grid>
 
-            <Border Grid.Row="2" BorderThickness="1" BorderBrush="Black" Margin="5" ClipToBounds="True">
-                <MediaElement Focusable="True" Name="media" LoadedBehavior="Manual" Margin="5" ScrubbingEnabled="True" Source="C:\Users\А\Downloads\Загрузки uTorrent\Forsazh_2001_BDRip_by_Dalemake.avi" >
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MediaOpened">
-                            <i:InvokeCommandAction Command="{Binding GetDuration}" CommandParameter="{Binding ElementName=media}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </MediaElement>
-            </Border>
-            <Grid Grid.Row="3">
+
+
+
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Margin="5" Content="{Binding Game.TimeVideo, Converter={StaticResource TimeToStringConverter}}" VerticalContentAlignment="Center"></Label>
-                <Slider Name="Slider1" Grid.Column="1" Value="{Binding Game.TimeVideo, Mode=TwoWay}" VerticalAlignment="Center" Margin="5" Maximum="{Binding Duration}" SmallChange="0">
+                <Label 
+                    Grid.Column="0" 
+                    Margin="5" 
+                    Content="{Binding GameTime, Converter={StaticResource TimeToStringConverter}}" 
+                    VerticalContentAlignment="Center"/>
+                <Slider 
+                    Name="Slider1" 
+                    Grid.Column="1"
+                    Value="{Binding GameTime, Mode=TwoWay}" 
+                    VerticalAlignment="Center"
+                    Margin="5" 
+                    Maximum="{Binding Duration}" 
+                    SmallChange="1">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="ValueChanged">
                             <i:InvokeCommandAction Command="{Binding SliderValueChanged}" CommandParameter="{Binding ElementName=tacticsGrid}" />
-                            <i:InvokeCommandAction Command="{Binding UpdateVideoPosition}" CommandParameter="{Binding ElementName=media}" />
+                            <!--<i:InvokeCommandAction Command="{Binding UpdateVideoPosition}" CommandParameter="{Binding ElementName=media}" />-->
                         </i:EventTrigger>
                         <i:EventTrigger EventName="Loaded">
                             <i:InvokeCommandAction Command="{Binding SliderValueChanged}" CommandParameter="{Binding ElementName=tacticsGrid}" />
@@ -210,6 +233,6 @@
         <ListView Grid.Column="1" Margin="5">
             <Label>ListView</Label>
         </ListView>
-        
+
     </Grid>
 </Window>

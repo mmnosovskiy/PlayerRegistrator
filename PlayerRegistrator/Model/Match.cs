@@ -17,10 +17,10 @@ namespace PlayerRegistrator.Model
         public Tactics GetCurrent(Team team)
         {
             var seq = from tactics in team.Tactics
-                      where tactics.TimeVideo == TimeVideo && tactics.Half == Half
+                      where (tactics.TimeVideo > TimeVideo - 1000 || tactics.TimeVideo > TimeVideo + 1000) && tactics.Half == Half
                       select tactics;
             List<Tactics> list = seq.ToList();
-            if (list.Count == 1)
+            if (list.Count > 0)
             {
                 return list[0];
             }
