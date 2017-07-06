@@ -136,7 +136,7 @@ namespace PlayerRegistrator.ViewModel
                 TimeVideo = 0,
                 Team1 = new Team() { NumberColor = Colors.White, ShirtColor = Colors.DarkRed, Tactics = new List<Tactics>() },
                 Team2 = new Team() { NumberColor = Colors.White, ShirtColor = Colors.Purple, Tactics = new List<Tactics>() },
-                DisabledPlayers = new List<Player>() { new Player() { Name = "PL8", Number = 8 }, new Player() { Name = "PL2", Number = 2 } }
+                DisabledPlayers = new List<Player>() { new Player() { Name = "PL2", Number = 2 } }
             };
             IsPlaying = true;
             List<Place> p0 = new List<Place>()
