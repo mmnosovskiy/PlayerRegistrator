@@ -255,10 +255,10 @@ namespace PlayerRegistrator.ViewModel
             Game.Team1.Tactics.Add(new Tactics(1, 1000, p1));
             Game.Team1.Tactics.Add(new Tactics(1, 2000, p2));
             Game.Team1.Tactics.Add(new Tactics(1, 20000, p3));
-            Game.Team2.Tactics.Add(new Tactics(1, 200, p5));
-            Game.Team2.Tactics.Add(new Tactics(1, 1000, p7));
-            Game.Team2.Tactics.Add(new Tactics(1, 2000, p4));
-            Game.Team2.Tactics.Add(new Tactics(1, 3000, p6));
+            Game.Team2.Tactics.Add(new Tactics(1, 1000, p5));
+            Game.Team2.Tactics.Add(new Tactics(1, 3000, p7));
+            Game.Team2.Tactics.Add(new Tactics(1, 5000, p4));
+            Game.Team2.Tactics.Add(new Tactics(1, 8000, p6));
             bool[][] temp = new bool[5][] { new bool[6], new bool[6], new bool[6], new bool[6], new bool[6] };
             PlayPauseCommand = new RelayCommand<MediaElement>(x => PlayPauseMethod(x));
             ForwardCommand = new RelayCommand<MediaElement>(x => ForwardMethod(x));
