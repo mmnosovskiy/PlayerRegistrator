@@ -22,7 +22,7 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Background="Red" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2">Вход не выполнен!</TextBlock>
+                <TextBlock Grid.Column="0" Background="Red" Foreground="White" FontSize="25" TextAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2">Вход не выполнен!</TextBlock>
                 <Button Grid.Column="1" x:Name="ExitAlertButton" Command="{Binding HideAlertCommand}" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Foreground="White" Margin="0 0 5 0" Content="X"></Button>
             </Grid>
         </Border>
@@ -53,5 +53,8 @@
                 </StackPanel>
             </Border>
         </ScrollViewer>
+        <Border Grid.Row="2" BorderThickness="2" BorderBrush="Black">
+            <TextBlock Background="White" Text="{Binding Log}" Height="75"></TextBlock>
+        </Border>
     </Grid>
 </local:BasePage>

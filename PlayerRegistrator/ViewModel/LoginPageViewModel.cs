@@ -131,7 +131,7 @@ namespace PlayerRegistrator
         {
             if (IsLoggingIn)
                 return;
-
+            Log = string.Empty;
             try
             {
                 IsLoggingIn = true;
@@ -141,9 +141,11 @@ namespace PlayerRegistrator
 
                 await Task.Run(() =>
                 {
-                    IsLoggedIn = !MsSqlService.Login(CurrentUser, obj.SecurePassword.Unsecure());
+                    IsLoggedIn = MsSqlService.Login(CurrentUser, obj.SecurePassword.Unsecure());
                     if (IsLoggedIn)
+                    {
                         Log += "Вход выполнен успешно!\n";
+                    }
                     else
                     {
                         Log += "Неверный пароль!\n";
