@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace PlayerRegistrator.Model
+namespace PlayerRegistrator
 {
     public class Team
     {

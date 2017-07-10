@@ -1,7 +1,7 @@
 ﻿using System;
 using PlayerRegistrator.Model;
 
-namespace PlayerRegistrator.Design
+namespace PlayerRegistrator
 {
     public class DesignDataService : IDataService
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlayerRegistrator.ViewModel
+namespace PlayerRegistrator
 {
     public class PlayerComparer : IEqualityComparer<Player>
     {

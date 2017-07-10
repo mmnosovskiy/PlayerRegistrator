@@ -14,7 +14,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using PlayerRegistrator.Model;
 
-namespace PlayerRegistrator.ViewModel
+namespace PlayerRegistrator
 {
     /// <summary>
     /// This class contains static references to all the view models in the
@@ -31,13 +31,14 @@ namespace PlayerRegistrator.ViewModel
 
             if (ViewModelBase.IsInDesignModeStatic)
             {
-                SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
+                SimpleIoc.Default.Register<IDataService, DesignDataService>();
             }
             else
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
             }
-
+            SimpleIoc.Default.Register<LoginPageViewModel>();
+            SimpleIoc.Default.Register<MainPageViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
         }
 
@@ -52,6 +53,20 @@ namespace PlayerRegistrator.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+        public MainPageViewModel MainPage
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<MainPageViewModel>();
+            }
+        }
+        public LoginPageViewModel LoginPage
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<LoginPageViewModel>();
             }
         }
 

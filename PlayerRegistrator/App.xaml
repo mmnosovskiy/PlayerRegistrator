@@ -1,8 +1,7 @@
 ﻿<Application x:Class="PlayerRegistrator.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:PlayerRegistrator.ViewModel"
-             xmlns:c="clr-namespace:PlayerRegistratorConverter"
+             xmlns:c="clr-namespace:PlayerRegistrator"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:ignore="http://www.galasoft.ch/ignore"
@@ -11,9 +10,13 @@
     
     <Application.Resources>
         <!--Global View Model Locator-->
-        <vm:ViewModelLocator x:Key="Locator"
+        <c:ViewModelLocator x:Key="Locator"
                              d:IsDataSource="True" />
-        <c:TimeToStringConverter x:Key="TimeToStringConverter"/>
+        <ResourceDictionary x:Key="RegistratorDictionary">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="RegistratorDictionary.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
     
 </Application>
