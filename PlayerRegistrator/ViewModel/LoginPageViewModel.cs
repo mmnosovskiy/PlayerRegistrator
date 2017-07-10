@@ -12,6 +12,7 @@ using System.Security;
 using System.Threading.Tasks;
 using Uniso.InStat.Web;
 using Uniso.InStat;
+using GalaSoft.MvvmLight.Ioc;
 
 namespace PlayerRegistrator
 {
@@ -140,7 +141,7 @@ namespace PlayerRegistrator
 
                 await Task.Run(() =>
                 {
-                    IsLoggedIn = MsSqlService.Login(CurrentUser, obj.SecurePassword.Unsecure());
+                    IsLoggedIn = !MsSqlService.Login(CurrentUser, obj.SecurePassword.Unsecure());
                     if (IsLoggedIn)
                         Log += "Вход выполнен успешно!\n";
                     else
@@ -158,6 +159,11 @@ namespace PlayerRegistrator
             finally
             {
                 IsLoggingIn = false;
+                if (IsLoggedIn)
+                {
+                    var mainViewModelInstance = SimpleIoc.Default.GetInstance<MainViewModel>();
+                    mainViewModelInstance.CurrentPage = ApplicationPage.Settings;
+                }
             }
         }
         public RelayCommand HideAlertCommand
@@ -177,7 +183,7 @@ namespace PlayerRegistrator
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
+        /// Initializes a new instance of the LoginPageViewModel class.
         /// </summary>
         public LoginPageViewModel()
         {

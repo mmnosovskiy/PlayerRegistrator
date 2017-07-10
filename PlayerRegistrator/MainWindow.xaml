@@ -17,7 +17,7 @@
         <Binding Path="Main" Source="{StaticResource Locator}" />
     </Window.DataContext>-->
     <Grid>
-        <Frame x:Name="MainFrame" Content="{Binding CurrentPage, Converter={local:ApplicationPageValueConverter}}"></Frame>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Content="{Binding CurrentPage, Converter={local:ApplicationPageValueConverter}}"></Frame>
     </Grid>    
     
     

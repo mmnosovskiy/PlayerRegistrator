@@ -16,8 +16,12 @@ namespace PlayerRegistrator
         /// </summary>
         Login = 0,
         /// <summary>
+        /// Settings page
+        /// </summary>
+        Settings = 1,
+        /// <summary>
         /// Main page of application
         /// </summary>
-        Main = 1
+        Main = 2
     }
 }

@@ -38,6 +38,7 @@ namespace PlayerRegistrator
                 SimpleIoc.Default.Register<IDataService, DataService>();
             }
             SimpleIoc.Default.Register<LoginPageViewModel>();
+            SimpleIoc.Default.Register<SettingsPageViewModel>();
             SimpleIoc.Default.Register<MainPageViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
         }
@@ -67,6 +68,13 @@ namespace PlayerRegistrator
             get
             {
                 return ServiceLocator.Current.GetInstance<LoginPageViewModel>();
+            }
+        }
+        public SettingsPageViewModel SettingsPage
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<SettingsPageViewModel>();
             }
         }
 

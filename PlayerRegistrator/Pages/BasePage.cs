@@ -35,7 +35,7 @@ namespace PlayerRegistrator
         /// <summary>
         /// Duration of animation
         /// </summary>
-        public float SlideSeconds { get; set; } = 1f;
+        public float SlideSeconds { get; set; } = 1.5f;
 
         public VM ViewModel
         {

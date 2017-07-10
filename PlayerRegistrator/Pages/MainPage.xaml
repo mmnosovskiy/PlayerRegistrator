@@ -42,7 +42,8 @@
                     LoadedBehavior="Manual"
                     Margin="5" 
                     ScrubbingEnabled="True" 
-                    Source="C:\Users\Lucky13\Downloads\Загрузки uTorrent\Forsazh_2001_BDRip_by_Dalemake.avi">
+                    Source="{Binding VideoSource}"
+                    MediaOpened="media_MediaOpened">
                 <!--MediaOpened="media_MediaOpened"-->
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MediaOpened">

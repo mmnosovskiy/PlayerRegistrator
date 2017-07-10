@@ -11,19 +11,13 @@ using System.Windows.Threading;
 
 namespace PlayerRegistrator
 {
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// See http://www.mvvmlight.net
-    /// </para>
-    /// </summary>
     public class MainPageViewModel : ViewModelBase
     {
         #region Private Fields
         
         private bool IsPlaying { get; set; }
         private int _duration;
-        private string _videoSource;
+        private Uri _videoSource;
         private Match _game;
         private int[][] _tactics1;
         private int[][] _tactics2;
@@ -171,7 +165,7 @@ namespace PlayerRegistrator
                 Set(ref _duration, value);
             }
         }
-        public string VideoSource
+        public Uri VideoSource
         {
             get
             {
@@ -182,6 +176,7 @@ namespace PlayerRegistrator
                 Set(ref _videoSource, value);
             }
         }
+     
         public Match Game
         {
             get
@@ -223,7 +218,7 @@ namespace PlayerRegistrator
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
+        /// Initializes a new instance of the MainPageViewModel class.
         /// </summary>
         public MainPageViewModel()
         {
@@ -237,6 +232,7 @@ namespace PlayerRegistrator
             //            return;
             //        }
             //    });
+            VideoSource = new Uri(@"C:\Users\Lucky13\Downloads\Загрузки uTorrent\Фильмы и сериалы\Gladiator.2000.Theatrical.Cut_[scarabey.org]");
             List1 = new List<int>();
             List2 = new List<int>();
             Game = new Match()

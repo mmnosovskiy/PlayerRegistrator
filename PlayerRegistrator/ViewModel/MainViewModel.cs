@@ -12,12 +12,6 @@ using System.Windows.Threading;
 
 namespace PlayerRegistrator
 {
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// See http://www.mvvmlight.net
-    /// </para>
-    /// </summary>
     public class MainViewModel : ViewModelBase
     {
         #region Private Members
@@ -49,7 +43,8 @@ namespace PlayerRegistrator
         /// </summary>
         public MainViewModel(IDataService dataService)
         {
-            _dataService = dataService;            
+            _dataService = dataService;
+            CurrentPage = ApplicationPage.Login;
         }
 
         #endregion

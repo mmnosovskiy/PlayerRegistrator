@@ -21,6 +21,9 @@ namespace PlayerRegistrator
                 case ApplicationPage.Login:
                     return new LoginPage();
 
+                case ApplicationPage.Settings:
+                    return new SettingsPage();
+
                 case ApplicationPage.Main:
                     return new MainPage();
 
