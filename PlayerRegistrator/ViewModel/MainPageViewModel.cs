@@ -232,7 +232,7 @@ namespace PlayerRegistrator
             //            return;
             //        }
             //    });
-            VideoSource = new Uri(@"C:\Users\Lucky13\Downloads\Загрузки uTorrent\Фильмы и сериалы\Gladiator.2000.Theatrical.Cut_[scarabey.org]");
+            //VideoSource = new Uri(@"C:\Users\Lucky13\Downloads\Загрузки uTorrent\Фильмы и сериалы\Gladiator.2000.Theatrical.Cut_[scarabey.org].avi");
             List1 = new List<int>();
             List2 = new List<int>();
             Game = new Match()

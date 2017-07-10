@@ -102,9 +102,10 @@ namespace PlayerRegistrator
                         if (File.Exists(VideoPath))
                         {
                             var mainViewModelInstance = ServiceLocator.Current.GetInstance<MainViewModel>();
-                            mainViewModelInstance.CurrentPage = ApplicationPage.Main;
+                            
                             var mainPageViewModelInstance = ServiceLocator.Current.GetInstance<MainPageViewModel>();
                             mainPageViewModelInstance.VideoSource = new Uri(VideoPath);
+                            mainViewModelInstance.CurrentPage = ApplicationPage.Main;
                         }
                     }));
             }

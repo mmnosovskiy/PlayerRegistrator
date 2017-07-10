@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 using GalaSoft.MvvmLight;
+using Microsoft.Practices.ServiceLocation;
 
 namespace PlayerRegistrator
 {
@@ -62,7 +63,7 @@ namespace PlayerRegistrator
 
             this.Loaded += BasePage_Loaded;
 
-            this.DataContext = new VM();
+            this.DataContext = ServiceLocator.Current.GetInstance<VM>();
         }
 
         #endregion

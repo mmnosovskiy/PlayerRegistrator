@@ -24,7 +24,7 @@ namespace PlayerRegistrator
         public MainPage()
         {
             InitializeComponent();
-            //media.Source = new Uri(@"C:\Users\Lucky13\Downloads\Урок 1. Введение в WPF и XAML");
+            //media.Source = new Uri(@"C:\Users\Lucky13\Downloads\Урок 1. Введение в WPF и XAML.mkv");
             media.Play();     
         }
         
