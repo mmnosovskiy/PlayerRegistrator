@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Linq;
 using System.Windows.Threading;
+using Uniso.InStat.Web;
 
 namespace PlayerRegistrator
 {
@@ -133,7 +134,7 @@ namespace PlayerRegistrator
         #endregion
 
         #region Public Properties
-
+        
         public TimeSpan GameTimeSpan
         {
             get { return TimeSpan.FromMilliseconds(Game.TimeVideo); }
@@ -244,6 +245,7 @@ namespace PlayerRegistrator
                 DisabledPlayers = new List<Player>() { new Player() { Name = "PL2", Number = 2 } }
             };
             IsPlaying = true;
+            
             List<Place> p0 = new List<Place>()
             {
                 new Place() { Amplua = 0, Position = 2, Player = new Player() { Name = "PL1", Number = 1 } },

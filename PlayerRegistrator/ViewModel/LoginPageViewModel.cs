@@ -141,7 +141,7 @@ namespace PlayerRegistrator
 
                 await Task.Run(() =>
                 {
-                    IsLoggedIn = MsSqlService.Login(CurrentUser, obj.SecurePassword.Unsecure());
+                    IsLoggedIn = !MsSqlService.Login(CurrentUser, obj.SecurePassword.Unsecure());
                     if (IsLoggedIn)
                     {
                         Log += "Вход выполнен успешно!\n";

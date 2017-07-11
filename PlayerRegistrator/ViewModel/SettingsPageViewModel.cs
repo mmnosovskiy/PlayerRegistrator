@@ -46,7 +46,7 @@ namespace PlayerRegistrator
         }
         public bool IsReady
         {
-            get { return !string.IsNullOrWhiteSpace(VideoPath) && !string.IsNullOrWhiteSpace(GamePart); }
+            get { return !string.IsNullOrWhiteSpace(VideoPath) && !string.IsNullOrWhiteSpace(GamePart) && VideoId > 0; }
             set
             {
                 Set(ref _isReady, value);                
@@ -57,7 +57,8 @@ namespace PlayerRegistrator
             get { return _videoId; }
             set
             {
-                Set(ref _videoId, value);                
+                Set(ref _videoId, value);
+                RaisePropertyChanged("IsReady");            
             }
         }
         public string GamePart
@@ -101,8 +102,9 @@ namespace PlayerRegistrator
                     {
                         if (File.Exists(VideoPath))
                         {
+                            Uniso.InStat.Match match = MsSqlService.GetMatch(0, VideoId);
                             var mainViewModelInstance = ServiceLocator.Current.GetInstance<MainViewModel>();
-
+                            
                             var mainPageViewModelInstance = ServiceLocator.Current.GetInstance<MainPageViewModel>();
                             mainPageViewModelInstance.VideoSource = new Uri(VideoPath);
                             mainViewModelInstance.CurrentPage = ApplicationPage.Main;
